@@ -45,14 +45,7 @@ fi
 KEY_COUNT=$(grep -c '^ssh-' "$AUTH_KEYS" 2>/dev/null || echo "0")
 log_ok "Pre-flight passed: user '${USERNAME}' exists, ${KEY_COUNT} SSH key(s) found, sudo access confirmed."
 
-if [[ "$DRY_RUN" != "true" ]]; then
-    log_warn "SSH hardening will disable root login and password authentication."
-    log_warn "Make sure you can SSH as '${USERNAME}' before continuing."
-    confirm_action "Proceed with SSH hardening?" || {
-        log_info "Aborted. Test SSH access first: ssh ${USERNAME}@<server-ip>"
-        exit 0
-    }
-fi
+log_info "Proceeding with SSH hardening (root login + password auth will be disabled)."
 
 # ---------------------------------------------------------------------------
 # SSH hardening via drop-in config

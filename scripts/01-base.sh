@@ -17,8 +17,9 @@ section "Base System Setup"
 # System updates
 # ---------------------------------------------------------------------------
 log_info "Updating package lists and upgrading installed packages..."
+export DEBIAN_FRONTEND=noninteractive
 run apt-get update -qq
-run apt-get upgrade -y -qq
+run apt-get -o Dpkg::Options::="--force-confold" upgrade -y -qq
 
 # ---------------------------------------------------------------------------
 # Essential packages

@@ -13,6 +13,48 @@ NOTIFICATION_EMAIL="${NOTIFICATION_EMAIL:-}"
 section "Security Hardening"
 
 # ---------------------------------------------------------------------------
+# Pre-flight: verify deploy user can SSH in before we lock down
+# ---------------------------------------------------------------------------
+require_vars DEPLOY_USER
+
+USERNAME="${DEPLOY_USER}"
+USER_HOME="/home/${USERNAME}"
+AUTH_KEYS="${USER_HOME}/.ssh/authorized_keys"
+
+# Check 1: deploy user exists
+if ! id "$USERNAME" &>/dev/null; then
+    log_error "Deploy user '${USERNAME}' does not exist."
+    log_error "Run 'make user' first before applying security hardening."
+    exit 1
+fi
+
+# Check 2: authorized_keys exists and has at least one key
+if [[ ! -f "$AUTH_KEYS" ]] || [[ ! -s "$AUTH_KEYS" ]]; then
+    log_error "No SSH keys found in ${AUTH_KEYS}"
+    log_error "The deploy user has no way to log in. Run 'make user' first."
+    exit 1
+fi
+
+# Check 3: user is in sudo group
+if ! id -nG "$USERNAME" | grep -qw sudo; then
+    log_error "Deploy user '${USERNAME}' is not in the sudo group."
+    log_error "Without sudo, the deploy user cannot administer the server."
+    exit 1
+fi
+
+KEY_COUNT=$(grep -c '^ssh-' "$AUTH_KEYS" 2>/dev/null || echo "0")
+log_ok "Pre-flight passed: user '${USERNAME}' exists, ${KEY_COUNT} SSH key(s) found, sudo access confirmed."
+
+if [[ "$DRY_RUN" != "true" ]]; then
+    log_warn "SSH hardening will disable root login and password authentication."
+    log_warn "Make sure you can SSH as '${USERNAME}' before continuing."
+    confirm_action "Proceed with SSH hardening?" || {
+        log_info "Aborted. Test SSH access first: ssh ${USERNAME}@<server-ip>"
+        exit 0
+    }
+fi
+
+# ---------------------------------------------------------------------------
 # SSH hardening via drop-in config
 # ---------------------------------------------------------------------------
 log_info "Deploying SSH hardening config..."

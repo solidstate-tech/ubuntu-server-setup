@@ -60,6 +60,16 @@ run chmod 600 "$AUTH_KEYS"
 run chown -R "${USERNAME}:${USERNAME}" "$SSH_DIR"
 
 # ---------------------------------------------------------------------------
+# Passwordless sudo (required since password is locked)
+# ---------------------------------------------------------------------------
+log_info "Configuring passwordless sudo for '${USERNAME}'..."
+if [[ "$DRY_RUN" != "true" ]]; then
+    echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" > "/etc/sudoers.d/${USERNAME}"
+    chmod 440 "/etc/sudoers.d/${USERNAME}"
+fi
+log_ok "Passwordless sudo configured."
+
+# ---------------------------------------------------------------------------
 # Disable password for this user (force key-only auth)
 # ---------------------------------------------------------------------------
 log_info "Locking password for '${USERNAME}' (key-only auth)..."

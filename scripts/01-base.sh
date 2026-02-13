@@ -24,6 +24,7 @@ run apt-get upgrade -y -qq
 # Essential packages
 # ---------------------------------------------------------------------------
 PACKAGES=(
+    make
     curl
     wget
     git

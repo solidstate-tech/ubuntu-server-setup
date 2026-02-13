@@ -9,14 +9,12 @@ api:
   dashboard: true
   insecure: false
 
+# No global HTTP→HTTPS redirect. This allows IP-only (HTTP) and domain (HTTPS)
+# services to coexist. Domain services can use the redirect-to-https@file
+# middleware from dynamic/redirect-https.yml for per-router redirects.
 entryPoints:
   web:
     address: ":80"
-    http:
-      redirections:
-        entryPoint:
-          to: websecure
-          scheme: https
   websecure:
     address: ":443"
 

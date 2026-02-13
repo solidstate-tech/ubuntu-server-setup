@@ -65,5 +65,15 @@ run chown -R "${USERNAME}:${USERNAME}" "$SSH_DIR"
 log_info "Locking password for '${USERNAME}' (key-only auth)..."
 run passwd -l "$USERNAME"
 
+# ---------------------------------------------------------------------------
+# Create apps directory
+# ---------------------------------------------------------------------------
+APPS_DIR="/home/${USERNAME}/apps"
+log_info "Creating apps directory at ${APPS_DIR}..."
+run mkdir -p "$APPS_DIR"
+run chown "${USERNAME}:${USERNAME}" "$APPS_DIR"
+log_ok "Apps directory created."
+
 log_ok "Deploy user '${USERNAME}' setup complete."
+log_info "Clone application repos into: ${APPS_DIR}"
 log_info "Remember: script 04-docker.sh will add this user to the 'docker' group."

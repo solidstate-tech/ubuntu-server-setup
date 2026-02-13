@@ -1,0 +1,12 @@
+# Middleware: HTTP to HTTPS redirect
+# Domain-based services can use this middleware on their web entrypoint router:
+#   - "traefik.http.routers.myapp-http.rule=Host(`app.example.com`)"
+#   - "traefik.http.routers.myapp-http.entrypoints=web"
+#   - "traefik.http.routers.myapp-http.middlewares=redirect-to-https@file"
+
+http:
+  middlewares:
+    redirect-to-https:
+      redirectScheme:
+        scheme: https
+        permanent: true

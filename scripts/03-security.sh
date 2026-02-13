@@ -58,7 +58,7 @@ run cp "${PROJECT_ROOT}/config/sshd_config.d/hardened.conf" "${SSHD_DROPIN_DIR}/
 run chmod 644 "${SSHD_DROPIN_DIR}/hardened.conf"
 
 log_info "Restarting sshd..."
-run systemctl restart sshd
+run systemctl restart ssh
 log_ok "SSH hardened."
 
 # ---------------------------------------------------------------------------

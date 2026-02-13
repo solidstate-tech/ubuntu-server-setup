@@ -67,7 +67,7 @@ status: ## Show current server setup status
 	@if docker ps --format '{{.Names}}' 2>/dev/null | grep -q traefik; then echo "  Traefik: running"; else echo "  Traefik: not running"; fi
 	@echo ""
 	@echo "--- Services ---"
-	@systemctl is-active --quiet sshd && echo "  sshd: active" || echo "  sshd: inactive"
+	@systemctl is-active --quiet ssh && echo "  ssh: active" || echo "  ssh: inactive"
 	@systemctl is-active --quiet docker 2>/dev/null && echo "  docker: active" || echo "  docker: inactive"
 	@systemctl is-active --quiet unattended-upgrades 2>/dev/null && echo "  unattended-upgrades: active" || echo "  unattended-upgrades: inactive"
 	@echo ""

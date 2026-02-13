@@ -72,4 +72,4 @@ status: ## Show current server setup status
 	@systemctl is-active --quiet unattended-upgrades 2>/dev/null && echo "  unattended-upgrades: active" || echo "  unattended-upgrades: inactive"
 	@echo ""
 	@echo "--- Backups ---"
-	@if crontab -l 2>/dev/null | grep -q run-backup; then echo "  Backup cron: installed"; else echo "  Backup cron: not found"; fi
+	@if test -f /etc/cron.d/server-backup; then echo "  Backup cron: installed"; else echo "  Backup cron: not found"; fi

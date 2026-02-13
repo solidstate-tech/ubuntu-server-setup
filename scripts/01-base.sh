@@ -32,6 +32,7 @@ PACKAGES=(
     vim
     tmux
     unzip
+    locales
     ca-certificates
     gnupg
     software-properties-common
